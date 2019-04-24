@@ -319,54 +319,58 @@ public class runTicTacToe {
 	public void run()
 	{
 
-		Random rand = new Random();
-		int turn = rand.nextInt(2)+1; //1 = player1's turn, 2 = player2's turn, who go first is randomized 
+		// makeMove(new positionTicTacToe(0,1,0,1),1,board);
+		// printBoardTicTacToe(board);
+		ai1.myAIAlgorithm(board,1);
+
+		// Random rand = new Random();
+		// int turn = rand.nextInt(2)+1; //1 = player1's turn, 2 = player2's turn, who go first is randomized 
 		
-		while((result = isEnded())==0) //game loop
-		{
-			if(turn==1)
-			{
-				positionTicTacToe player1NextMove = ai1.myAIAlgorithm(board,1); //1 stands for player 1
-				if(makeMove(player1NextMove,1,board))
-					turn = 2;
-			}
-			else if(turn==2)
-			{
-				positionTicTacToe player2NextMove = ai2.myAIAlgorithm(board,2); //2 stands for player 2
-				if(makeMove(player2NextMove,2,board))
-					turn = 1;
-			}
-			else 
-			{
-				//exception occurs, stop
-				System.out.println("Error!");
-			}
-		}
+		// while((result = isEnded())==0) //game loop
+		// {
+		// 	if(turn==1)
+		// 	{
+		// 		positionTicTacToe player1NextMove = ai1.myAIAlgorithm(board,1); //1 stands for player 1
+		// 		if(makeMove(player1NextMove,1,board))
+		// 			turn = 2;
+		// 	}
+		// 	else if(turn==2)
+		// 	{
+		// 		positionTicTacToe player2NextMove = ai2.myAIAlgorithm(board,2); //2 stands for player 2
+		// 		if(makeMove(player2NextMove,2,board))
+		// 			turn = 1;
+		// 	}
+		// 	else 
+		// 	{
+		// 		//exception occurs, stop
+		// 		System.out.println("Error!");
+		// 	}
+		// }
 		
-			//game is ended
-		if(result==1)
-		{
-			//game ends, player 1 wins 
-			System.out.println("Player1 Wins");
-			printBoardTicTacToe(board);
-		}
-		else if(result==2)
-		{
-			//game ends, player 1 wins 
-			System.out.println("Player2 Wins");
-			printBoardTicTacToe(board);
-		}
-		else if(result==-1)
-		{
-			//game ends, it's a draw 
-			System.out.println("This is a draw.");
-			printBoardTicTacToe(board);
-		}
-		else
-		{
-			//exception occurs, stop
-			System.out.println("Error!");
-		}
+		// 	//game is ended
+		// if(result==1)
+		// {
+		// 	//game ends, player 1 wins 
+		// 	System.out.println("Player1 Wins");
+		// 	printBoardTicTacToe(board);
+		// }
+		// else if(result==2)
+		// {
+		// 	//game ends, player 1 wins 
+		// 	System.out.println("Player2 Wins");
+		// 	printBoardTicTacToe(board);
+		// }
+		// else if(result==-1)
+		// {
+		// 	//game ends, it's a draw 
+		// 	System.out.println("This is a draw.");
+		// 	printBoardTicTacToe(board);
+		// }
+		// else
+		// {
+		// 	//exception occurs, stop
+		// 	System.out.println("Error!");
+		// }
 		
 	}
 	
