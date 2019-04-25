@@ -32,6 +32,64 @@ public class runTicTacToe {
 					}
 		return boardTicTacToe;
 	}
+
+	public int staticEval(List<positionTicTacToe> board, int player, positionTicTacToe position) {
+		
+		// Position Variables
+		ArrayList<Integer> verticalcount = new ArrayList<Integer>();
+		
+		for (int i=0;i<4;i++) //Z
+		{
+			for(int j=0;j<4;j++) //X
+			{
+				int count = 0;
+				int count2 = 0;
+				for(int k=0;k<4;k++) //Y
+				{
+					if (getStateOfPositionFromBoard(new positionTicTacToe(j,k,i),board)==1)
+					{
+						count++;
+
+						if (count == 4) {
+							count = Integer.MAX_VALUE;
+						}else if (count == 3) { //winning move
+							count = Integer.MAX_VALUE - 2;
+						}
+
+						count2 = 0;
+					}
+					else if(getStateOfPositionFromBoard(new positionTicTacToe(j,k,i),board)==2)
+					{
+
+
+						count2++;
+
+						if (count2 == 4) {
+							count2 = Integer.MAX_VALUE;
+						}else if (count2 == 3) { //blocking move
+							count2 = Integer.MAX_VALUE - 1;
+						}
+
+						count = 0;
+						
+					}
+					else if (getStateOfPositionFromBoard(new positionTicTacToe(j,k,i),board)==0) {
+						
+						count2 = 0;
+						count = 0;		
+										
+					}
+					verticalcount.add(count);
+					verticalcount.add(count2);
+				}
+
+			}
+		}
+		// for(int i = 0; i < verticalcount.size(); i++){
+  //       	System.out.print(" " + verticalcount.get(i));
+  //   	}
+		return Collections.max(verticalcount);
+	}
 	
 	private List<positionTicTacToe> deepCopyATicTacToeBoard(List<positionTicTacToe> board)
 	{
@@ -316,61 +374,128 @@ public class runTicTacToe {
 		}
 		return false;
 	}
+
+	public List<positionTicTacToe> getPossible_positions(List<positionTicTacToe> board){
+		List<positionTicTacToe> free_spaces = new ArrayList<positionTicTacToe>();
+		for (int i=0;i<4;i++)
+		{
+			for(int j=0;j<4;j++)
+			{
+				for(int k=0;k<4;k++)
+				{
+					int pos = getStateOfPositionFromBoard(new positionTicTacToe(j,k,i), board); 
+					System.out.println("fuck: " + pos);
+					if (pos==0 || pos==-1)
+					{
+						free_spaces.add(new positionTicTacToe(j,k,i));
+					}
+				}
+
+			}
+		}
+		for(int x = 0; x < free_spaces.size(); x++){
+			free_spaces.get(x).printPosition();
+		}
+		return free_spaces;
+	}
+
 	public void run()
 	{
 
-		// makeMove(new positionTicTacToe(0,1,0,1),1,board);
-		// printBoardTicTacToe(board);
-		ai1.myAIAlgorithm(board,1);
+		
+		Random rand = new Random();
+		int turn = rand.nextInt(2)+1; //1 = player1's turn, 2 = player2's turn, who go first is randomized 
 
-		// Random rand = new Random();
-		// int turn = rand.nextInt(2)+1; //1 = player1's turn, 2 = player2's turn, who go first is randomized 
+		if(turn==1){
+			Random r = new Random();
+			int x = r.nextInt(4);
+			int y = r.nextInt(4);
+			int z = r.nextInt(4);
+			positionTicTacToe myNextMove = new positionTicTacToe(x,y,z);
+
+			makeMove(myNextMove,1,board);
+
+			Random r2 = new Random();
+			int x2 = r2.nextInt(4);
+			int y2 = r2.nextInt(4);
+			int z2 = r2.nextInt(4);
+			positionTicTacToe myNextMove2 = new positionTicTacToe(x2,y2,z2);
+
+			makeMove(myNextMove2,2,board);
+			turn = 1;
+		}else{
+			Random r = new Random();
+			int x = r.nextInt(4);
+			int y = r.nextInt(4);
+			int z = r.nextInt(4);
+			positionTicTacToe myNextMove = new positionTicTacToe(x,y,z);
+
+			makeMove(myNextMove,2,board);
+
+			Random r2 = new Random();
+			int x2 = r2.nextInt(4);
+			int y2 = r2.nextInt(4);
+			int z2 = r2.nextInt(4);
+			positionTicTacToe myNextMove2 = new positionTicTacToe(x2,y2,z2);
+
+			makeMove(myNextMove2,1,board);
+			turn = 2;
+		}
+
+		// int move_count = 0;
 		
-		// while((result = isEnded())==0) //game loop
-		// {
-		// 	if(turn==1)
-		// 	{
-		// 		positionTicTacToe player1NextMove = ai1.myAIAlgorithm(board,1); //1 stands for player 1
-		// 		if(makeMove(player1NextMove,1,board))
-		// 			turn = 2;
-		// 	}
-		// 	else if(turn==2)
-		// 	{
-		// 		positionTicTacToe player2NextMove = ai2.myAIAlgorithm(board,2); //2 stands for player 2
-		// 		if(makeMove(player2NextMove,2,board))
-		// 			turn = 1;
-		// 	}
-		// 	else 
-		// 	{
-		// 		//exception occurs, stop
-		// 		System.out.println("Error!");
-		// 	}
-		// }
+		while((result = isEnded())==0) //game loop
+		{
+
+			// if(move_count == 1){
+			// 	printBoardTicTacToe(board);
+			// 	break;
+			// }
+			// move_count++;
+
+			if(turn==1)
+			{
+				positionTicTacToe player1NextMove = ai1.myAIAlgorithm(board,1); //1 stands for player 1
+				if(makeMove(player1NextMove,1,board))
+					turn = 2;
+			}
+			else if(turn==2)
+			{
+				positionTicTacToe player2NextMove = ai2.myAIAlgorithmRandom(board,2); //2 stands for player 2
+				if(makeMove(player2NextMove,2,board))
+					turn = 1;
+			}
+			else 
+			{
+				//exception occurs, stop
+				System.out.println("Error!");
+			}
+		}
 		
-		// 	//game is ended
-		// if(result==1)
-		// {
-		// 	//game ends, player 1 wins 
-		// 	System.out.println("Player1 Wins");
-		// 	printBoardTicTacToe(board);
-		// }
-		// else if(result==2)
-		// {
-		// 	//game ends, player 1 wins 
-		// 	System.out.println("Player2 Wins");
-		// 	printBoardTicTacToe(board);
-		// }
-		// else if(result==-1)
-		// {
-		// 	//game ends, it's a draw 
-		// 	System.out.println("This is a draw.");
-		// 	printBoardTicTacToe(board);
-		// }
-		// else
-		// {
-		// 	//exception occurs, stop
-		// 	System.out.println("Error!");
-		// }
+			//game is ended
+		if(result==1)
+		{
+			//game ends, player 1 wins 
+			System.out.println("Player1 Wins");
+			printBoardTicTacToe(board);
+		}
+		else if(result==2)
+		{
+			//game ends, player 1 wins 
+			System.out.println("Player2 Wins");
+			printBoardTicTacToe(board);
+		}
+		else if(result==-1)
+		{
+			//game ends, it's a draw 
+			System.out.println("This is a draw.");
+			printBoardTicTacToe(board);
+		}
+		else
+		{
+			//exception occurs, stop
+			System.out.println("Error!");
+		}
 		
 	}
 	
@@ -383,6 +508,33 @@ public class runTicTacToe {
 		//run game loop
 		runTicTacToe rttt = new runTicTacToe();
 		rttt.run();
+
+
+
+		// List<positionTicTacToe> board = rttt.createTicTacToeBoard();
+
+		// positionTicTacToe position = new positionTicTacToe(1,2,3,1);
+
+		// rttt.makeMove(position, 1, board);
+
+		// positionTicTacToe position2 = new positionTicTacToe(1,1,3,1);
+
+		// rttt.makeMove(position2, 1, board);
+
+		// rttt.getPossible_positions(board);
+
+		// // positionTicTacToe position3 = new positionTicTacToe(1,3,3,1);
+
+		// // rttt.makeMove(position3, 1, board);
+
+		// // // positionTicTacToe position4 = new positionTicTacToe(1,0,3,1);
+
+		// // // rttt.makeMove(position4, 2, board);
+
+		// rttt.printBoardTicTacToe(board);
+
+		// System.out.println("eval: " + rttt.staticEval(board, 1, position));
+
 	}
 }
 
