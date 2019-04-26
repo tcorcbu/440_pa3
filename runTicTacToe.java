@@ -399,103 +399,109 @@ public class runTicTacToe {
 		return free_spaces;
 	}
 
-	public void run()
+	public int run()
 	{
 
-		
-		Random rand = new Random();
-		int turn = rand.nextInt(2)+1; //1 = player1's turn, 2 = player2's turn, who go first is randomized 
 
-		if(turn==1){
-			Random r = new Random();
-			int x = r.nextInt(4);
-			int y = r.nextInt(4);
-			int z = r.nextInt(4);
-			positionTicTacToe myNextMove = new positionTicTacToe(x,y,z);
 
-			makeMove(myNextMove,1,board);
+			Random rand = new Random();
+			int turn = rand.nextInt(2)+1; //1 = player1's turn, 2 = player2's turn, who go first is randomized 
 
-			Random r2 = new Random();
-			int x2 = r2.nextInt(4);
-			int y2 = r2.nextInt(4);
-			int z2 = r2.nextInt(4);
-			positionTicTacToe myNextMove2 = new positionTicTacToe(x2,y2,z2);
+			if(turn==1){
+				Random r = new Random();
+				int x = r.nextInt(4);
+				int y = r.nextInt(4);
+				int z = r.nextInt(4);
+				positionTicTacToe myNextMove = new positionTicTacToe(x,y,z);
 
-			makeMove(myNextMove2,2,board);
-			turn = 1;
-		}else{
-			Random r = new Random();
-			int x = r.nextInt(4);
-			int y = r.nextInt(4);
-			int z = r.nextInt(4);
-			positionTicTacToe myNextMove = new positionTicTacToe(x,y,z);
+				makeMove(myNextMove,1,board);
 
-			makeMove(myNextMove,2,board);
+				Random r2 = new Random();
+				int x2 = r2.nextInt(4);
+				int y2 = r2.nextInt(4);
+				int z2 = r2.nextInt(4);
+				positionTicTacToe myNextMove2 = new positionTicTacToe(x2,y2,z2);
 
-			Random r2 = new Random();
-			int x2 = r2.nextInt(4);
-			int y2 = r2.nextInt(4);
-			int z2 = r2.nextInt(4);
-			positionTicTacToe myNextMove2 = new positionTicTacToe(x2,y2,z2);
+				makeMove(myNextMove2,2,board);
+				turn = 1;
+			}else{
+				Random r = new Random();
+				int x = r.nextInt(4);
+				int y = r.nextInt(4);
+				int z = r.nextInt(4);
+				positionTicTacToe myNextMove = new positionTicTacToe(x,y,z);
 
-			makeMove(myNextMove2,1,board);
-			turn = 2;
-		}
+				makeMove(myNextMove,2,board);
 
-		// int move_count = 0;
-		
-		while((result = isEnded())==0) //game loop
-		{
+				Random r2 = new Random();
+				int x2 = r2.nextInt(4);
+				int y2 = r2.nextInt(4);
+				int z2 = r2.nextInt(4);
+				positionTicTacToe myNextMove2 = new positionTicTacToe(x2,y2,z2);
 
-			// if(move_count == 1){
-			// 	printBoardTicTacToe(board);
-			// 	break;
-			// }
-			// move_count++;
-
-			if(turn==1)
-			{
-				positionTicTacToe player1NextMove = ai1.myAIAlgorithm(board,1); //1 stands for player 1
-				if(makeMove(player1NextMove,1,board))
-					turn = 2;
+				makeMove(myNextMove2,1,board);
+				turn = 2;
 			}
-			else if(turn==2)
+
+			// int move_count = 0;
+			
+			while((result = isEnded())==0) //game loop
 			{
-				positionTicTacToe player2NextMove = ai2.myAIAlgorithmRandom(board,2); //2 stands for player 2
-				if(makeMove(player2NextMove,2,board))
-					turn = 1;
+
+				// if(move_count == 1){
+				// 	printBoardTicTacToe(board);
+				// 	break;
+				// }
+				// move_count++;
+
+				if(turn==1)
+				{
+					positionTicTacToe player1NextMove = ai1.myAIAlgorithm(board,1); //1 stands for player 1
+					if(makeMove(player1NextMove,1,board))
+						turn = 2;
+				}
+				else if(turn==2)
+				{
+					positionTicTacToe player2NextMove = ai2.myAIAlgorithmRandom(board,2); //2 stands for player 2
+					if(makeMove(player2NextMove,2,board))
+						turn = 1;
+				}
+				else 
+				{
+					//exception occurs, stop
+					System.out.println("Error!");
+				}
 			}
-			else 
+			
+				//game is ended
+			if(result==1)
+			{
+				
+				//game ends, player 1 wins 
+				System.out.println("Player1 Wins");
+				// printBoardTicTacToe(board);
+			}
+			else if(result==2)
+			{
+				
+				//game ends, player 1 wins 
+				System.out.println("Player2 Wins");
+				// printBoardTicTacToe(board);
+			}
+			else if(result==-1)
+			{
+				//game ends, it's a draw 
+				System.out.println("This is a draw.");
+				// printBoardTicTacToe(board);
+			}
+			else
 			{
 				//exception occurs, stop
 				System.out.println("Error!");
 			}
-		}
+
+		return result;
 		
-			//game is ended
-		if(result==1)
-		{
-			//game ends, player 1 wins 
-			System.out.println("Player1 Wins");
-			printBoardTicTacToe(board);
-		}
-		else if(result==2)
-		{
-			//game ends, player 1 wins 
-			System.out.println("Player2 Wins");
-			printBoardTicTacToe(board);
-		}
-		else if(result==-1)
-		{
-			//game ends, it's a draw 
-			System.out.println("This is a draw.");
-			printBoardTicTacToe(board);
-		}
-		else
-		{
-			//exception occurs, stop
-			System.out.println("Error!");
-		}
 		
 	}
 	
@@ -503,11 +509,26 @@ public class runTicTacToe {
 	
 	//run the game once
 
-	public static void main(String[] args) {		
+	public static void main(String[] args) {	
+
+		int wins = 0;
+		int loses = 0;
 
 		//run game loop
-		runTicTacToe rttt = new runTicTacToe();
-		rttt.run();
+		
+		for(int i = 0; i < 100; i++){
+			runTicTacToe rttt = new runTicTacToe();
+			int res = rttt.run();
+			if(res == 1){
+				wins++;
+			}else if(res == 2){
+				loses++;
+			}
+		}
+
+		System.out.println("Wins: " + wins);
+		System.out.println("Loeses: " + loses);
+
 
 
 

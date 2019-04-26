@@ -15,12 +15,7 @@ public class aiTicTacToe {
 		
 		do
 			{
-				// Random rand = new Random();
-				// int x = rand.nextInt(4);
-				// int y = rand.nextInt(4);
-				// int z = rand.nextInt(4);
-				// myNextMove = new positionTicTacToe(x,y,z);
-
+				// calls get move which is our AI helper function
 				myNextMove = getMove(3, board, player);
 
 			}while(getStateOfPositionFromBoard(myNextMove,board)!=0);
@@ -49,42 +44,35 @@ public class aiTicTacToe {
 	}
 
 
-	// TODO
-	// static eval = what we are saying is heuristic now
-	// alpha beta pruning is actual heuristic
-	// data types and return types
-	// Test structure with simple cases
-	// function to get possible moves
-	// function to add position to board
-	// test depths
-	// maybe multi-threading?
-
 	private positionTicTacToe getMove(int depth, List<positionTicTacToe> board, int player){
 
 		// create node and init with current board
 		Node node = new Node();
 		node.setBoard(board);
 
+		// creates tree of children of potential moves and returns root
 		Node ret_node = createChildren(node, depth, player);
 
+		// deciding maximizing player
 		boolean maximizingPlayer = false;
 
 		if(player == 1){
 			maximizingPlayer = true;
 		}
 
+		// running minimax
 		int value = minimax(ret_node, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, maximizingPlayer);
 
+		// selecting the child with the value selected from minimax and getting the move to make
 		for(int i = 0; i < ret_node.getChildren().size(); i++){
 			Node child = ret_node.getChildren().get(i);
 			int temp_val = child.getHeuristic_value();
 			if(temp_val == value){
-				// System.out.println("----------------");
-				// printBoardTicTacToe(child.getBoard());
 				return child.getPosition();
 			}
 		}
 
+		// return the next move to make
 		return ret_node.getPosition();
 		
 	}
@@ -149,8 +137,7 @@ public class aiTicTacToe {
 
 		if(depth == 0){ // when the depth is reached the max (leaf node) compute that Node's board's heuristic 
 			int val = staticEval(node.getBoard(), player, node.getPosition());
-			// System.out.println("val: " + val);
-			node.setHeuristic_value(val);//getHeuristic(node.board);
+			node.setHeuristic_value(val);
 			return node;
 		}
 
@@ -166,6 +153,8 @@ public class aiTicTacToe {
 		// init node's children
 		node.setChildren(new ArrayList<Node>());
 
+
+		// loop through possible moves for board
 		for(int i = 0; i < possible_positions.size(); i++){
 
 			Node child = new Node();
@@ -179,8 +168,10 @@ public class aiTicTacToe {
 			// add position of move to board
 			child.addToBoard(child.getPosition(), player);
 
+			// call again for each child
 			Node child_node = createChildren(child, depth - 1, player);
 
+			// append child to list of child nodes
 			node.addChild(child_node);
 
 		}
@@ -189,10 +180,11 @@ public class aiTicTacToe {
 
 	}
 
+	// create a shallow copy of the board, just to get values
 	public static List<positionTicTacToe> shallowCopy(List<positionTicTacToe> board){
 
 		List<positionTicTacToe> copiedBoard = new ArrayList<positionTicTacToe>();
-		// for(Integer element : board) copiedBoard.add(element);
+
 		for(int i=0;i<board.size();i++)
 		{
 			copiedBoard.add(board.get(i));
@@ -201,8 +193,15 @@ public class aiTicTacToe {
 
 	}
 
+	// function to evaluate each leaf node board to then be used in minimax
 	public int staticEval(List<positionTicTacToe> board, int player, positionTicTacToe position) {
-		
+
+		int opposing = 1;
+
+		if(player == 1){
+			opposing = 2;
+		}
+
 		// Position Variables
 		ArrayList<Integer> verticalcount = new ArrayList<Integer>();
 		
@@ -214,27 +213,28 @@ public class aiTicTacToe {
 				int count2 = 0;
 				for(int k=0;k<4;k++) //Y
 				{
-					if (getStateOfPositionFromBoard(new positionTicTacToe(j,k,i),board)==1)
+					if (getStateOfPositionFromBoard(new positionTicTacToe(j,k,i),board)==player)
 					{
+						// player's tile
 						count++;
 
-						if (count == 4) {
+						if (count == 4) { //winning move
 							count = Integer.MAX_VALUE;
-						}else if (count == 3) { //winning move
+						}else if (count == 3) { // one away from winning move
 							count = Integer.MAX_VALUE - 2;
 						}
 
 						count2 = 0;
 					}
-					else if(getStateOfPositionFromBoard(new positionTicTacToe(j,k,i),board)==2)
+					else if(getStateOfPositionFromBoard(new positionTicTacToe(j,k,i),board)==opposing)
 					{
 
-
+						// oppossing tile
 						count2++;
 
-						if (count2 == 4) {
+						if (count2 == 4) {// oppossing winning move
 							count2 = Integer.MAX_VALUE;
-						}else if (count2 == 3) { //blocking move
+						}else if (count2 == 3) { // blocking move for player
 							count2 = Integer.MAX_VALUE - 1;
 						}
 
@@ -243,6 +243,7 @@ public class aiTicTacToe {
 					}
 					else if (getStateOfPositionFromBoard(new positionTicTacToe(j,k,i),board)==0) {
 						
+						// reset counts because there was an empty position
 						count2 = 0;
 						count = 0;		
 										
@@ -253,15 +254,15 @@ public class aiTicTacToe {
 
 			}
 		}
-		// for(int i = 0; i < verticalcount.size(); i++){
-  //       	System.out.print(" " + verticalcount.get(i));
-  //   	}
+		// return maximum value
 		return Collections.max(verticalcount);
 	}
 	
 
 
 	private int minimax(Node node, int depth, int alpha, int beta, boolean maximizingPlayer){
+
+		// all based off sudo code given
 
 		if(depth == 0){ //depth = 0 or node is a terminal node then
 			//return the heuristic value of node
@@ -270,7 +271,7 @@ public class aiTicTacToe {
 
 	    if(maximizingPlayer){
 
-	    	int value = Integer.MIN_VALUE;// −infinity
+	    	int value = Integer.MIN_VALUE;
 	    	int rec = 0;
 
 	    	List<Node> children = node.getChildren();

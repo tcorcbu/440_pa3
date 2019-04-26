@@ -1,0 +1,136 @@
+
+<html>
+<head>
+<title> CS440 PA3: Declan Halbert | Tom Corcoran  </title>
+<style>
+<!--
+body{
+font-family: 'Trebuchet MS', Verdana;
+}
+p{
+font-family: 'Trebuchet MS', Times;
+margin: 10px 10px 15px 20px;
+}
+h3{
+margin: 5px;
+}
+h2{
+margin: 10px;
+}
+h1{
+margin: 10px 0px 0px 20px;
+}
+div.main-body{
+align:center;
+margin: 30px;
+}
+hr{
+margin:20px 0px 20px 0px;
+}
+-->
+</style>
+</head>
+
+<body>
+<center>
+<a href="http://www.bu.edu"><img border="0" src="http://www.cs.bu.edu/fac/betke/images/bu-logo.gif"
+width="119" height="120"></a>
+</center>
+
+<h1> 4x4x4 Tic-Tac-Toe AI </h1>
+<p> 
+CS 440/640 Programming Assignment 3 <br>
+Declan Halbert & Tom Corcoran <br>
+April 24th, 2019
+</p>
+
+<div class="main-body">
+<hr>
+<h2> Problem Goal </h2>
+<p>
+Our goal during this assingment was to create an AI to win a game of 4x4x4 tic-tac-toe versus another AI that solely chose randomly. Our AI had to win every game, and take less than 5 seconds to compute its next move.
+</p>
+
+<hr>
+<h2> Method and Implementation </h2>
+<p>
+The way that we implemented our AI was using Minimax, Alpha-Beta Pruning along with a static evaluator. For every move, we generated a tree of all possible potential moves that our AI could make based upon a depth value. In order to make our AI assign moves in under 5 seconds, we kept to a depth value of 3. <br> <br>
+Our static evaluator then evaluated the boards of the leaf nodes of that tree, assigning them a value, the higher the better. For example, if our AI already had 3 tiles in a row, and the fourth would let the AI win, the static evaluator would return the max value of an integer. <br> <br>
+After returning the heuristic values into all of the leaf nodes, our algorithm would use Alpha-Beta Pruning to "prune" nodes from the tree, essentially speeding up our algorithm so that the Minimax would not have to check every single node in the tree. <br> <br>
+Seeing as our AI was only playing against an opponent choosing randomly, we did not implement any block actions aside from if the other AI had three tiles in a row on the same layer. We essentially built our AI to win as fast as possible, because the odds of random moves winning are extremely low.
+
+</p>
+
+<hr>
+<h2>Experiments</h2>
+<p>
+
+</p>
+
+
+<hr>
+<h2> Results</h2>
+<p>
+
+	We used two experiment sets, AI vs Random, and AI vs AI with similar settings. Because of the similar settings, the AI vs AI
+	result was relatively even, whereas the AI vs Random was much more drastic. For the similar settings, we used the same depth of three, but still kept the random first moves for each player. Since we used the same depth for the AI's in both experiments, the average efficiency was the about the same.  
+
+</p>
+
+<p>
+<table>
+<tr><td colspan=3><center><h3>Results</h3></center></td></tr>
+<tr>
+<td> Trial </td><td> Wins </td> <td> Loses </td> <td> Win Rate </td> <td> Efficiency (per turn)</td> 
+</tr>
+<tr>
+  <td> AI vs Random </td> 
+  <td> 98 </td> 
+  <td> 2 </td>
+  <td> 98% </td>
+  <td> 0.5 sec </td>
+</tr> 
+<tr>
+  <td> AI vs AI </td> 
+  <td> 43 </td> 
+  <td> 57 </td>
+  <td> 43% </td>
+  <td> 0.5 sec </td>
+</tr> 
+</table>
+</p>
+
+
+<hr>
+<h2> Discussion </h2>
+
+<p> 
+ Our AI worked exactly as we thought it would, winning almost all of the games that we put it through. However, we believe that a lot of work could be done on the heuristic function to make it better. Here are some of the ideas we wanted to implement but did not have time to do.
+<ul>
+<li> Be able to block opponents moves better. While we did implement this layer per layer, moves using more than one layer were not checked, and therefore leads the random AI to have a very small percentage chance of winning a game. </li>
+<li> Be able to assign moves on different layers. Our algorithm played the game as a 4x4x1, only using another layer if being blocked by the random AI. </li>
+</ul>
+</p>
+
+<hr>
+<h2> Conclusions </h2>
+
+<p>
+Our main conclusion was that evaluating a tic-tac-toe board can be extremely difficult, and assinging a value to a board can require a meticulous workflow. While our AI was able to beat the random AI at every game, we believe that if we had more time, we could've built a much better one that could've blocked the random AI's moves through layers and assigned tiles through layers.  
+
+</p>
+
+
+<hr>
+<h2> Credits and Bibliography </h2>
+<p> 
+
+</p>
+
+<hr>
+</div>
+</body>
+
+
+
+</html>
